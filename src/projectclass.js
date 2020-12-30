@@ -2,7 +2,14 @@ function CreateProjectItem(titleIn) {
     let title = titleIn;
     let description = '';
     let todoList = [];
+    let id = 0;
 
+    function setId (idIn){
+        id = idIn;
+    }
+    function getId (){
+        return id;
+    }
 
     function setTitle (titleIn){
         title = titleIn;
@@ -28,6 +35,7 @@ function CreateProjectItem(titleIn) {
         return todoList;
     }
     return {
+        setId, getId,
         setTitle, getTitle,
         setDescription, getDescription,
         addTodoItem, removeTodoItem, getTodoItems

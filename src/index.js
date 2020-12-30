@@ -5,7 +5,7 @@ import renderPage from './render_page';
 const t = CreateToDoItem('new todo title 1');
 const tt = CreateToDoItem('new todo title 2');
 
-const project1 = CreateProjectItem('New default project');
+const project1 = CreateProjectItem('New default project one');
 const project2 = CreateProjectItem('New default project 2');
 
 
@@ -16,7 +16,7 @@ project1.addTodoItem(tt);
 project1.addTodoItem(tt);
 project1.addTodoItem(tt);
 
-console.log(project1.getTodoItems())
+project2.addTodoItem(tt);
 
 let projectsList = [];
 projectsList.push(project1);
