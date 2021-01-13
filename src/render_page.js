@@ -10,24 +10,32 @@ let colorScheme = {
     botItemBackground : '#4b3832',
     formTextColor: '#FFF4E6',
     inputFormBackground: '#be9b7b',
-    buttonFormBackground: '#854442'
+    buttonFormBackground: '#854442',
+    lowPriorityBackground: '#b16562',
+    medPriorityBackground: '#a75553',
+    highPriorityBackground: '#854442',
+    prioritySelect: '#679b9d',
 }
 
 
 
-const renderPage = (() => {
+const RenderPage = (() => {
     let mainDiv = document.createElement('div');
     let projectsDiv = document.createElement('div');
     let todosDiv = document.createElement('div');
-    let controlModule = '';
+    
+    let ctrlAddProject =  ()=>{};
+    let ctrlSelectProject =  ()=>{};
+    let ctrlDeleteProject =  ()=>{};
+    let ctrlAddToDo = ()=>{};
 
-    let projectsList = [];
+    function init (addProjectFuncIn, selectProjectIn, deleteProjectIn, addTodoIn){
+        ctrlAddProject = addProjectFuncIn;
+        ctrlSelectProject = selectProjectIn;
+        ctrlDeleteProject = deleteProjectIn;
+        ctrlAddToDo = addTodoIn;
 
-    function init (projectsListIn, divToRenderIn, controlModuleIn){
-        projectsList = projectsListIn;
-        mainDiv = divToRenderIn;
-        controlModule = controlModuleIn;
-
+        document.getElementById('content').appendChild(mainDiv);
         document.body.style.background = '#111';
         mainDiv.appendChild(projectsDiv);
         mainDiv.appendChild(todosDiv);
@@ -60,29 +68,29 @@ const renderPage = (() => {
                                 justify-content: space-evenly;
                                 flex-wrap: wrap;
                                 width: 100%;
-                                background-color: ${colorScheme.botPaneBackground};`   
-
-        //add create project div/button
-        let addProjectDiv = document.createElement('div');
-        projectsDiv.appendChild(addProjectDiv);
-        addProjectDiv.classList.add('add-button-class');
-        addProjectDiv.innerHTML = 'add project';
-        addProjectDiv.addEventListener('click', _createProjectForm);
-
-
-        _renderProjectsFromList();
-        _displaySelectedProject(projectsList[0]);
+                                background-color: ${colorScheme.botPaneBackground};`           
     }
 
     //render all projects
-    function _renderProjectsFromList(){
+    function renderProjectsFromList(listOfProjects){
 
         //destroy old projects before drawing;
         document.querySelectorAll('.project-class').forEach(e => e.remove());
-           
+        
+        //add create project div/button
+        if (!document.getElementById('add-project-button-id')){
+            let addProjectDiv = document.createElement('div');
+            projectsDiv.appendChild(addProjectDiv);
+            addProjectDiv.classList.add('add-button-class');
+            addProjectDiv.id = 'add-project-button-id';
+            addProjectDiv.innerHTML = 'add project';
+            addProjectDiv.addEventListener('click', (()=>_createProjectForm(ctrlAddProject)));
+        }
+        
+
         //draw new projects
-        for (let indexNew = 0; indexNew < projectsList.length; indexNew++){
-            let projectItem = projectsList[indexNew];
+        for (let indexNew = 0; indexNew < listOfProjects.length; indexNew++){
+            let projectItem = listOfProjects[indexNew];
 
             //create div for each project in the project div(top)
             const singleProjectDiv = document.createElement('div');
@@ -90,9 +98,7 @@ const renderPage = (() => {
             
             singleProjectDiv.classList = 'project-class'; 
             singleProjectDiv.addEventListener('click', (() => {
-                    document.getElementById('temp-todo').remove(),
-                    _displaySelectedProject(projectItem);
-                    
+                ctrlSelectProject(projectItem);                    
             }))
 
             let titleText = document.createElement('h2');
@@ -106,7 +112,7 @@ const renderPage = (() => {
             descriptText.className = 'text-page';
             
             //icons on hover
-            _addIconsHover(singleProjectDiv, _createProjectForm, _deleteProject, projectItem);
+            _addIconsHover(singleProjectDiv, _createProjectForm, ctrlDeleteProject, projectItem);
 
         }
 
@@ -141,16 +147,13 @@ const renderPage = (() => {
         document.querySelectorAll('.text-page').forEach(e => e.style.cssText =`max-width: 500px;`);
     }
 
-    function _deleteProject(projectIn){
-        controlModule.removeProject(projectIn)
-        _renderProjectsFromList();
-    }
+
 
     function _addIconsHover(divToAppentTo, editFunction, deleteFunction, itemToManipulate){
         let modifyIcon = document.createElement('img');
             modifyIcon.src = '../src/Img/Edit_icon.png';
             divToAppentTo.appendChild(modifyIcon);
-            modifyIcon.style.cssText = `width: 30px;
+            modifyIcon.style.cssText = `width: 20px;
                                         position: absolute;
                                         top: 5px;
                                         right:3px;
@@ -158,7 +161,7 @@ const renderPage = (() => {
             let deleteIcon = document.createElement('img');
             deleteIcon.src = '../src/Img/Delete_icon.png';
             divToAppentTo.appendChild(deleteIcon);
-            deleteIcon.style.cssText = `width: 30px;
+            deleteIcon.style.cssText = `width: 20px;
                                         position: absolute;
                                         top: 5px;
                                         right:43px;
@@ -172,14 +175,21 @@ const renderPage = (() => {
                 modifyIcon.style.display = 'none';
                 deleteIcon.style.display = 'none';
             }))
-            modifyIcon.addEventListener('click', editFunction);
-            deleteIcon.addEventListener('click', (() => {deleteFunction(itemToManipulate)}));
-            alert(projectsList.length);
+            // modifyIcon.addEventListener('click', editFunction);
+            modifyIcon.addEventListener('click', (() => {let i =0;}))
+            
+            deleteIcon.addEventListener('click', (() => {
+                window.event.stopPropagation();
+                deleteFunction(itemToManipulate)}));
     }
+
+
+
+
     //displays todos of the selected project
-    function _displaySelectedProject (projectItem){
+    function displaySelectedProject (projectItem){
         document.querySelectorAll('#temp-todo').forEach(e => e.remove());
-        controlModule.setSelectedProject(projectItem);
+
         let tempTodoDiv = document.createElement('div'); //create new div that can be safely destroyed
         tempTodoDiv.id = 'temp-todo'; //will be destryed by id
         todosDiv.appendChild(tempTodoDiv);
@@ -189,14 +199,16 @@ const renderPage = (() => {
         let addTodoDiv = document.createElement('div');
         tempTodoDiv.appendChild(addTodoDiv);
         addTodoDiv.classList.add('add-button-class');
-        addTodoDiv.innerHTML = `${projectItem.getTitle()}`;
+        addTodoDiv.innerHTML = `Add todo`;
         addTodoDiv.addEventListener('click', (()=> _createTodoForm(projectItem)));
 
-        const todoList = projectItem.getTodoItems();
-        for (let k = 0; k < todoList.length; k++){
-
-            const todoItem = todoList[k];
-            _drawTodoItem(todoItem, tempTodoDiv);            
+        if (projectItem){
+            const todoList = projectItem.getTodoItems();
+            for (let k = 0; k < todoList.length; k++){
+                const todoItem = todoList[k];
+                _drawTodoItem(todoItem, tempTodoDiv);           
+        }
+         
     }
 
     
@@ -210,7 +222,9 @@ const renderPage = (() => {
                                         word-wrap: break-word;  
                                         text-alight: center;
                                         background-color: ${colorScheme.botItemBackground};`);
-                                        
+    document.querySelectorAll('.low-todo-class').forEach(e => e.style.cssText += `background-color: ${colorScheme.lowPriorityBackground}`);                                  
+    document.querySelectorAll('.med-todo-class').forEach(e => e.style.cssText += `background-color: ${colorScheme.medPriorityBackground}`);
+    document.querySelectorAll('.high-todo-class').forEach(e => e.style.cssText += `background-color: ${colorScheme.highPriorityBackground}`);
 
     document.querySelectorAll('.add-button-class').forEach(e => e.style.cssText += `
                                         display: inline-block;
@@ -231,10 +245,25 @@ const renderPage = (() => {
     }
 
     function _drawTodoItem(todoItem, tempTodoDiv){
+        //draws todo items of a selected project
+
         //for each todo item there should be a new div generated in the todo pane
         let singleTodoDiv = document.createElement('div');
         tempTodoDiv.appendChild(singleTodoDiv);
         singleTodoDiv.classList.add('todo-class');
+
+        //change color on priority:
+        switch(todoItem.getPriority()){
+            case 1:
+                singleTodoDiv.classList.add('low-todo-class');
+                break;
+            case 2:
+                singleTodoDiv.classList.add('med-todo-class');
+                break;
+            case 3:
+                singleTodoDiv.classList.add('high-todo-class');
+                break;
+        }        
         
         let todoTitle = document.createElement('h4');
         singleTodoDiv.appendChild(todoTitle);
@@ -252,7 +281,8 @@ const renderPage = (() => {
 
 
     //form to create a project
-    function _createProjectForm (){
+    //addProject comes from control module
+    function _createProjectForm (addProject){
         
         let _projectForm = document.createElement('div'); //overlay for project form
         mainDiv.appendChild(_projectForm);
@@ -313,9 +343,8 @@ const renderPage = (() => {
         submitCreateBtn.className = 'button-form';
         submitCreateBtn.innerHTML = 'Create';
         submitCreateBtn.addEventListener('click', (()=> {
-            if(controlModule.addProject(getTitleInput.value, getDescriptInput.value))
-            {
-                _renderProjectsFromList();
+            if(addProject(getTitleInput.value, getDescriptInput.value))
+            {                
                 (_DestroyProjectForm(_projectForm))();
             }
             else return;
@@ -378,7 +407,7 @@ const renderPage = (() => {
                                                 padding: 10px;
                                                 `
         }
-
+        
     }
 
     function _DestroyProjectForm(_projectForm){
@@ -404,8 +433,9 @@ const renderPage = (() => {
 
         let overlayTitle = document.createElement('h1');
         overlayContent.appendChild(overlayTitle);
-        overlayTitle.innerHTML = 'Add new todo item';
+        overlayTitle.innerHTML = 'Add a new todo item';
         overlayTitle.classList.add('text-form');
+
 
         let getTitleLbl = document.createElement('label');
         overlayContent.appendChild(getTitleLbl);
@@ -440,15 +470,79 @@ const renderPage = (() => {
         getDescriptInput.classList = 'input-form';
         getDescriptInput.placeholder = 'Notes...\nMore notes...';
 
+        let getDueDateLbl = document.createElement('label');
+        overlayContent.appendChild(getDueDateLbl);
+        getDueDateLbl.style.display = 'block';
+
+        let getDueDateText= document.createElement('p');
+        getDueDateLbl.appendChild(getDueDateText);
+        getDueDateText.innerHTML = 'Due Date';
+        getDueDateText.classList = 'text-form';
+
+        let getDueDateInput = document.createElement('input');
+        getDueDateLbl.appendChild(getDueDateInput);
+        getDueDateInput.type = 'date';
+        getDueDateInput.classList = 'input-form';
+
+        let getPriorityLbl = document.createElement('label');
+        overlayContent.appendChild(getPriorityLbl);
+        getDueDateLbl.style.display = 'block';
+
+        let getPriorityText= document.createElement('p');
+        getPriorityLbl.appendChild(getPriorityText);
+        getPriorityText.innerHTML = 'Priority';
+        getPriorityText.classList = 'text-form';
+
+        let getLowPriorityInput = document.createElement('div');
+        getPriorityLbl.appendChild(getLowPriorityInput);
+        getLowPriorityInput.classList = 'proirity-select';
+        getLowPriorityInput.id = 'low-pty';
+        getLowPriorityInput.priorityNum = 1;
+        getLowPriorityInput.style.backgroundColor = `${colorScheme.lowPriorityBackground}`
+        getLowPriorityInput.addEventListener('click', ()=>{_changePriorityColor(getLowPriorityInput)});
+
+        let getMedPriorityInput = document.createElement('div');
+        getPriorityLbl.appendChild(getMedPriorityInput);
+        getMedPriorityInput.classList = 'proirity-select';
+        getMedPriorityInput.id = 'med-pty';
+        getMedPriorityInput.priorityNum = 2;
+        getMedPriorityInput.style.backgroundColor = `${colorScheme.medPriorityBackground}`
+        getMedPriorityInput.style.border =`3px solid ${colorScheme.prioritySelect}`;
+        getMedPriorityInput.addEventListener('click', ()=>{_changePriorityColor(getMedPriorityInput)});
+        
+        
+        let getHighPriorityInput = document.createElement('div');
+        getPriorityLbl.appendChild(getHighPriorityInput);
+        getHighPriorityInput.classList = 'proirity-select';
+        getHighPriorityInput.id = 'high-pty';
+        getHighPriorityInput.priorityNum = 3;
+        getHighPriorityInput.style.backgroundColor = `${colorScheme.highPriorityBackground}`
+        getHighPriorityInput.addEventListener('click', ()=>{_changePriorityColor(getHighPriorityInput)});
+
+        let selectedProirity = 2;
+
+        function _changePriorityColor(priorityButton){
+            
+            let priorityItems = document.getElementsByClassName('proirity-select');
+            for (let i = 0; i<priorityItems.length; i++){
+                priorityItems[i].style.cssText += `
+                                                border: none;
+                                                `
+        }
+        
+            priorityButton.style.border =`3px solid ${colorScheme.prioritySelect}`;
+            selectedProirity = priorityButton.priorityNum;
+        }
+
+        
         let submitCreateBtn = document.createElement('button');
         overlayContent.appendChild(submitCreateBtn);
-        submitCreateBtn.className = 'button-form';
+        submitCreateBtn.classList = 'button-form';
         submitCreateBtn.innerHTML = 'Create';
         submitCreateBtn.addEventListener('click', (()=> {
-            if(controlModule.addTodo(getTitleInput.value, getDescriptInput.value))
+            if(ctrlAddToDo(getTitleInput.value, getDescriptInput.value, getDueDateInput.value, selectedProirity))
             {
                 (_destroyTodoForm(_todoForm)());
-                _displaySelectedProject(projectItem)
             }
             else return;
         }))
@@ -466,7 +560,7 @@ const renderPage = (() => {
                                         background-color: rgba(0,0,0, 0.7);`;
 
         overlayContent.style.cssText = `position: relative;
-                                        top: 15%;
+                                        top: 7%;
                                         width: 40%;
                                         text-align: center;
                                         background-color: ${colorScheme.topPaneBackground};
@@ -503,6 +597,7 @@ const renderPage = (() => {
         let buttonsToBeStyled = document.getElementsByClassName('button-form');
         for (let i = 0; i<buttonsToBeStyled.length; i++){
             buttonsToBeStyled[i].style.cssText += `
+                                                display: block;
                                                 color: ${colorScheme.formTextColor};
                                                 margin: 20px;
                                                 background-color: ${colorScheme.buttonFormBackground};
@@ -510,6 +605,16 @@ const renderPage = (() => {
                                                 padding: 10px;
                                                 `
         }
+        let priorityToBeStyled = document.getElementsByClassName('proirity-select');
+        for (let i = 0; i<priorityToBeStyled.length; i++){
+            priorityToBeStyled[i].style.cssText += `
+                                                display: inline-block;
+                                                margin: 20px;
+                                                border: none;
+                                                padding: 20px;
+                                                `
+        }
+
     }
 
     function _destroyTodoForm(_todoForm){
@@ -517,7 +622,9 @@ const renderPage = (() => {
     }
     return {
         init,
+        renderProjectsFromList,
+        displaySelectedProject,
     }
 })();
 
-export {renderPage as default};
+export {RenderPage as default};
