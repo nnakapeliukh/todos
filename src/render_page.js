@@ -1,4 +1,4 @@
-// continue: deleting project does not redraw todo items
+//figure out why todo items style is messed up
 
 //probably have to be separated into at leas 2 files: 1 for projects 1 for todos
 //color pallete https://www.color-hex.com/color-palette/389
@@ -47,28 +47,9 @@ const RenderPage = (() => {
 
         //projects pane        
         //add auto resizing of the height depending on how many aditional overlays
-        document.body.style.margin = '0';
-        projectsDiv.style.cssText = `
-                                display: flex;                                
-                                min-height: 30vh;
-                                min-height: 290px;
-                                min-width: 100%;
-                                background-color: ${colorScheme.topPaneBackground};
-                                flex: 1 1 auto;
-                                overflow-y: auto;
-                                overflow-x: auto;`   
-        // align-items: center;
-
+        projectsDiv.className = 'proects-div';
         //todos pane 
-        todosDiv.style.cssText = `
-                                display: flex;
-                                min-height: 60vh;
-                                flex: 1 1 auto;
-                                overflow-x: auto;
-                                justify-content: space-evenly;
-                                flex-wrap: wrap;
-                                width: 100%;
-                                background-color: ${colorScheme.botPaneBackground};`           
+        todosDiv.className = 'todos-div';
     }
 
     //render all projects
@@ -116,35 +97,6 @@ const RenderPage = (() => {
 
         }
 
-
-        
-        //apply styles for projects
-        document.querySelectorAll('.project-class').forEach(e => e.style.cssText += `
-                                            display: inline-block;
-                                            position:relative;
-                                            min-height: 200px;
-                                            width: 200px;
-                                            margin: 20px;
-                                            padding-left: 10px;
-                                            padding-right: 5px;
-                                            word-wrap: break-word;  
-                                            text-alight: center;
-                                            background-color: ${colorScheme.topItemBackground};                                           
-                                            overflow: hidden;
-                                            text-overflow: ellipsis;                                                
-                                            `);
-        
-        document.querySelectorAll('.add-button-class').forEach(e => e.style.cssText += `
-                                            display: inline-block;
-                                            height: 50px;
-                                            width: 50px;
-                                            margin: 20px;
-                                            padding: 20px;
-                                            text-alight: center;
-                                            // background-color: ${colorScheme.topItemBackground}`);
-        
-
-        document.querySelectorAll('.text-page').forEach(e => e.style.cssText =`max-width: 500px;`);
     }
 
 
@@ -207,42 +159,12 @@ const RenderPage = (() => {
             for (let k = 0; k < todoList.length; k++){
                 const todoItem = todoList[k];
                 _drawTodoItem(todoItem, tempTodoDiv);           
+            }
         }
          
     }
+        
 
-    
-    //apply styles for todos
-    document.querySelectorAll('.todo-class').forEach(e => e.style.cssText += `
-                                        display: inline-block;
-                                        min-height: 200px;
-                                        min-width: 200px;
-                                        margin: 20px auto;
-                                        padding: 20px;
-                                        word-wrap: break-word;  
-                                        text-alight: center;
-                                        background-color: ${colorScheme.botItemBackground};`);
-    document.querySelectorAll('.low-todo-class').forEach(e => e.style.cssText += `background-color: ${colorScheme.lowPriorityBackground}`);                                  
-    document.querySelectorAll('.med-todo-class').forEach(e => e.style.cssText += `background-color: ${colorScheme.medPriorityBackground}`);
-    document.querySelectorAll('.high-todo-class').forEach(e => e.style.cssText += `background-color: ${colorScheme.highPriorityBackground}`);
-
-    document.querySelectorAll('.add-button-class').forEach(e => e.style.cssText += `
-                                        display: inline-block;
-                                        height: 50px;
-                                        width: 50px;
-                                        margin: 20px;
-                                        padding: 20px;
-                                        text-alight: center;
-                                        background-color: ${colorScheme.topItemBackground}`);
-
-    document.querySelectorAll('.todo-text').forEach(e => e.style.cssText += `
-                                        display: block;
-                                        max-width: 220px;
-                                        margin: 20px;
-                                        word-wrap: break-word;
-                                        padding: 20px;
-                                        text-alight: center;`);
-    }
 
     function _drawTodoItem(todoItem, tempTodoDiv){
         //draws todo items of a selected project
@@ -286,6 +208,7 @@ const RenderPage = (() => {
         
         let _projectForm = document.createElement('div'); //overlay for project form
         mainDiv.appendChild(_projectForm);
+        _projectForm.className = 'create-element-form';
         
         let closeBtn = document.createElement('span');
         closeBtn.innerHTML = 'x';
@@ -293,10 +216,12 @@ const RenderPage = (() => {
         closeBtn.title = 'Close';
         _projectForm.appendChild(closeBtn);
         closeBtn.addEventListener('click', _DestroyProjectForm(_projectForm));
+        closeBtn.className = 'close-button';
 
 
         let overlayContent = document.createElement('div');
         _projectForm.appendChild(overlayContent);
+        overlayContent.className = 'create-project-overlay'
 
         let overlayTitle = document.createElement('h1');
         overlayContent.appendChild(overlayTitle);
@@ -351,63 +276,6 @@ const RenderPage = (() => {
         }))
 
 
-        //overlay style:
-        _projectForm.style.cssText = `height: 100%;
-                                        width: 100%;
-                                        position: fixed;
-                                        z-index: 1;
-                                        display: block;
-                                        top: 0;
-                                        left: 0;
-                                        background-color: rgb(0,0,0);
-                                        background-color: rgba(0,0,0, 0.7);`;
-
-        overlayContent.style.cssText = `position: relative;
-                                        top: 25%;
-                                        width: 40%;
-                                        text-align: center;
-                                        background-color: ${colorScheme.topPaneBackground};
-                                        margin-top: 30px;
-                                        margin: auto;`;
-
-        closeBtn.style.cssText = `position: absolute;
-                                  top: 20px;
-                                  right: 45px;
-                                  font-size: 60px;
-                                  cursor: pointer;
-                                  color: white;`;
-
-        //form elements styles                         
-        let textToBeStyled = document.getElementsByClassName('text-form');
-        for (let i = 0; i<textToBeStyled.length; i++){
-            textToBeStyled[i].style.cssText += `
-                                                color: ${colorScheme.formTextColor};
-                                                margin: 10px;
-                                                `
-        }
-
-        let inputsToBeStyled = document.getElementsByClassName('input-form');
-        for (let i = 0; i<inputsToBeStyled.length; i++){
-            inputsToBeStyled[i].style.cssText += `
-                                                color: ${colorScheme.formTextColor};
-                                                margin-bottom: 20px;
-                                                background-color: ${colorScheme.inputFormBackground};
-                                                border: none;
-                                                padding: 5px;
-                                                `
-        }
-
-        let buttonsToBeStyled = document.getElementsByClassName('button-form');
-        for (let i = 0; i<buttonsToBeStyled.length; i++){
-            buttonsToBeStyled[i].style.cssText += `
-                                                color: ${colorScheme.formTextColor};
-                                                margin: 20px;
-                                                background-color: ${colorScheme.buttonFormBackground};
-                                                border: none;
-                                                padding: 10px;
-                                                `
-        }
-        
     }
 
     function _DestroyProjectForm(_projectForm){
@@ -419,6 +287,7 @@ const RenderPage = (() => {
 
         let _todoForm = document.createElement('div'); //overlay for project form
         mainDiv.appendChild(_todoForm);
+        _todoForm.className = 'create-element-form';
         
         let closeBtn = document.createElement('span');
         closeBtn.innerHTML = 'x';
@@ -426,10 +295,11 @@ const RenderPage = (() => {
         closeBtn.title = 'Close';
         _todoForm.appendChild(closeBtn);
         closeBtn.addEventListener('click', _destroyTodoForm(_todoForm));
-
+        closeBtn.className = 'close-button';
 
         let overlayContent = document.createElement('div');
         _todoForm.appendChild(overlayContent);
+        overlayContent.id = 'create-todo-overlay'
 
         let overlayTitle = document.createElement('h1');
         overlayContent.appendChild(overlayTitle);
@@ -546,74 +416,6 @@ const RenderPage = (() => {
             }
             else return;
         }))
-
-
-        //overlay style:
-        _todoForm.style.cssText = `height: 100%;
-                                        width: 100%;
-                                        position: fixed;
-                                        z-index: 1;
-                                        display: block;
-                                        top: 0;
-                                        left: 0;
-                                        background-color: rgb(0,0,0);
-                                        background-color: rgba(0,0,0, 0.7);`;
-
-        overlayContent.style.cssText = `position: relative;
-                                        top: 7%;
-                                        width: 40%;
-                                        text-align: center;
-                                        background-color: ${colorScheme.topPaneBackground};
-                                        margin-top: 30px;
-                                        margin: auto;`;
-
-        closeBtn.style.cssText = `position: absolute;
-                                  top: 20px;
-                                  right: 45px;
-                                  font-size: 60px;
-                                  cursor: pointer;
-                                  color: white;`;
-
-        //form elements styles                         
-        let textToBeStyled = document.getElementsByClassName('text-form');
-        for (let i = 0; i<textToBeStyled.length; i++){
-            textToBeStyled[i].style.cssText += `
-                                                color: ${colorScheme.formTextColor};
-                                                margin: 10px;
-                                                `
-        }
-
-        let inputsToBeStyled = document.getElementsByClassName('input-form');
-        for (let i = 0; i<inputsToBeStyled.length; i++){
-            inputsToBeStyled[i].style.cssText += `
-                                                color: ${colorScheme.formTextColor};
-                                                margin-bottom: 20px;
-                                                background-color: ${colorScheme.inputFormBackground};
-                                                border: none;
-                                                padding: 5px;
-                                                `
-        }
-
-        let buttonsToBeStyled = document.getElementsByClassName('button-form');
-        for (let i = 0; i<buttonsToBeStyled.length; i++){
-            buttonsToBeStyled[i].style.cssText += `
-                                                display: block;
-                                                color: ${colorScheme.formTextColor};
-                                                margin: 20px;
-                                                background-color: ${colorScheme.buttonFormBackground};
-                                                border: none;
-                                                padding: 10px;
-                                                `
-        }
-        let priorityToBeStyled = document.getElementsByClassName('proirity-select');
-        for (let i = 0; i<priorityToBeStyled.length; i++){
-            priorityToBeStyled[i].style.cssText += `
-                                                display: inline-block;
-                                                margin: 20px;
-                                                border: none;
-                                                padding: 20px;
-                                                `
-        }
 
     }
 

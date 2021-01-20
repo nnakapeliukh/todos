@@ -6,14 +6,14 @@ import ControlModule from './control_module';
 
 let projectsList = [];
 const ControlEntity = ControlModule(projectsList);
-const t = CreateToDoItem('new todo title 1');
+const t = CreateToDoItem('Default to do item N1');
 t.setPriority(1);
 
-const tt = CreateToDoItem('new todo title 2');
+const tt = CreateToDoItem('Default to do item N2');
 tt.setPriority(2);
 
 
-const ttt = CreateToDoItem('new todo title 2');
+const ttt = CreateToDoItem('Default to do item N3');
 ttt.setPriority(3);
 
 
