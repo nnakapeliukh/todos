@@ -3,19 +3,19 @@
 //probably have to be separated into at leas 2 files: 1 for projects 1 for todos
 //color pallete https://www.color-hex.com/color-palette/389
 //move somhere else 
-let colorScheme = {
-    topPaneBackground : '#3c2f2f',
-    botPaneBackground : '#be9b7b',
-    topItemBackground : '#854442',
-    botItemBackground : '#4b3832',
-    formTextColor: '#FFF4E6',
-    inputFormBackground: '#be9b7b',
-    buttonFormBackground: '#854442',
-    lowPriorityBackground: '#b16562',
-    medPriorityBackground: '#a75553',
-    highPriorityBackground: '#854442',
-    prioritySelect: '#679b9d',
-}
+// let colorScheme = {
+//     topPaneBackground : '#3c2f2f',
+//     botPaneBackground : '#be9b7b',
+//     topItemBackground : '#854442',
+//     botItemBackground : '#4b3832',
+//     formTextColor: '#FFF4E6',
+//     inputFormBackground: '#be9b7b',
+//     buttonFormBackground: '#854442',
+//     lowPriorityBackground: '#b16562',
+//     medPriorityBackground: '#a75553',
+//     highPriorityBackground: '#854442',
+//     prioritySelect: '#679b9d',
+// }
 
 
 
@@ -28,12 +28,16 @@ const RenderPage = (() => {
     let ctrlSelectProject =  ()=>{};
     let ctrlDeleteProject =  ()=>{};
     let ctrlAddToDo = ()=>{};
+    let ctrlModifyProj = () =>{};
+    let ctrlDeleteTodo = () => {};
 
-    function init (addProjectFuncIn, selectProjectIn, deleteProjectIn, addTodoIn){
+    function init (addProjectFuncIn, selectProjectIn, deleteProjectIn, addTodoIn, modifyProjectIn, deleteTodoIn){
         ctrlAddProject = addProjectFuncIn;
         ctrlSelectProject = selectProjectIn;
         ctrlDeleteProject = deleteProjectIn;
         ctrlAddToDo = addTodoIn;
+        ctrlModifyProj = modifyProjectIn;
+        ctrlDeleteTodo = deleteTodoIn;
 
         document.getElementById('content').appendChild(mainDiv);
         document.body.style.background = '#111';
@@ -65,7 +69,7 @@ const RenderPage = (() => {
             addProjectDiv.classList.add('add-button-class');
             addProjectDiv.id = 'add-project-button-id';
             addProjectDiv.innerHTML = 'add project';
-            addProjectDiv.addEventListener('click', (()=>_createProjectForm(ctrlAddProject)));
+            addProjectDiv.addEventListener('click', (()=>_createProjectForm(null)));
         }
         
 
@@ -116,7 +120,7 @@ const RenderPage = (() => {
             deleteIcon.style.cssText = `width: 20px;
                                         position: absolute;
                                         top: 5px;
-                                        right:43px;
+                                        right:28px;
                                         display: none;`;
 
             divToAppentTo.addEventListener('mouseover', (()=>{
@@ -128,7 +132,10 @@ const RenderPage = (() => {
                 deleteIcon.style.display = 'none';
             }))
             // modifyIcon.addEventListener('click', editFunction);
-            modifyIcon.addEventListener('click', (() => {let i =0;}))
+            modifyIcon.addEventListener('click', (() => {
+                window.event.stopPropagation();
+                editFunction(itemToManipulate)
+            }));
             
             deleteIcon.addEventListener('click', (() => {
                 window.event.stopPropagation();
@@ -158,15 +165,16 @@ const RenderPage = (() => {
             const todoList = projectItem.getTodoItems();
             for (let k = 0; k < todoList.length; k++){
                 const todoItem = todoList[k];
-                _drawTodoItem(todoItem, tempTodoDiv);           
+                _drawTodoItem(todoItem, tempTodoDiv, projectItem);           
             }
         }
-         
+
+        
     }
         
 
 
-    function _drawTodoItem(todoItem, tempTodoDiv){
+    function _drawTodoItem(todoItem, tempTodoDiv, projectItem){
         //draws todo items of a selected project
 
         //for each todo item there should be a new div generated in the todo pane
@@ -198,14 +206,14 @@ const RenderPage = (() => {
         todoDescr.innerHTML = todoItem.getDescription();
         //add show/hide toggle for long comments
 
-
+        _addIconsHover(singleTodoDiv, _createTodoForm, ctrlDeleteTodo, projectItem);
     }
 
 
     //form to create a project
     //addProject comes from control module
-    function _createProjectForm (addProject){
-        
+    function _createProjectForm (projectIn){
+        //if projectIn is not empty - modify
         let _projectForm = document.createElement('div'); //overlay for project form
         mainDiv.appendChild(_projectForm);
         _projectForm.className = 'create-element-form';
@@ -268,13 +276,28 @@ const RenderPage = (() => {
         submitCreateBtn.className = 'button-form';
         submitCreateBtn.innerHTML = 'Create';
         submitCreateBtn.addEventListener('click', (()=> {
-            if(addProject(getTitleInput.value, getDescriptInput.value))
-            {                
-                (_DestroyProjectForm(_projectForm))();
+            if (!projectIn){
+                if(ctrlAddProject(getTitleInput.value, getDescriptInput.value))
+                {                
+                    (_DestroyProjectForm(_projectForm))();
+                }
+                else return;
             }
-            else return;
+            else if (projectIn){
+                if(ctrlModifyProj(projectIn, getTitleInput.value, getDescriptInput.value))
+                {                
+                    (_DestroyProjectForm(_projectForm))();
+                }
+                else return;
+            }
         }))
 
+        if (projectIn){
+            getTitleInput.value = projectIn.getTitle();
+            getDescriptInput.value = projectIn.getDescription();
+            overlayTitle.innerHTML = getTitleInput.value;
+            submitCreateBtn.innerHTML = 'Modify';
+        }
 
     }
 

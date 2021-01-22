@@ -18,8 +18,7 @@
 
   .proects-div{
     display: flex;                                
-    min-height: 30vh;
-    min-height: 290px;
+    min-height: 38vh;
     min-width: 100%;
     background-color: var(--topPaneBackground);
     flex: 1 1 auto;
@@ -29,7 +28,7 @@
 
 .todos-div{
     display: flex;
-    min-height: 60vh;
+    min-height: 62vh;
     flex: 1 1 auto;
     overflow-x: auto;
     justify-content: space-evenly;
@@ -67,6 +66,7 @@
 
 .todo-class{
     display: inline-block;
+    position:relative;
     min-height: 200px;
     min-width: 200px;
     margin: 20px;
