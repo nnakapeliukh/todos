@@ -3,19 +3,19 @@
 //probably have to be separated into at leas 2 files: 1 for projects 1 for todos
 //color pallete https://www.color-hex.com/color-palette/389
 //move somhere else 
-// let colorScheme = {
-//     topPaneBackground : '#3c2f2f',
-//     botPaneBackground : '#be9b7b',
-//     topItemBackground : '#854442',
-//     botItemBackground : '#4b3832',
-//     formTextColor: '#FFF4E6',
-//     inputFormBackground: '#be9b7b',
-//     buttonFormBackground: '#854442',
-//     lowPriorityBackground: '#b16562',
-//     medPriorityBackground: '#a75553',
-//     highPriorityBackground: '#854442',
-//     prioritySelect: '#679b9d',
-// }
+let colorScheme = {
+    // topPaneBackground : '#3c2f2f',
+    // botPaneBackground : '#be9b7b',
+    // topItemBackground : '#854442',
+    // botItemBackground : '#4b3832',
+    // formTextColor: '#FFF4E6',
+    // inputFormBackground: '#be9b7b',
+    // buttonFormBackground: '#854442',
+    lowPriorityBackground: '#b16562',
+    medPriorityBackground: '#a75553',
+    highPriorityBackground: '#854442',
+    prioritySelect: '#679b9d',
+}
 
 
 
@@ -30,14 +30,16 @@ const RenderPage = (() => {
     let ctrlAddToDo = ()=>{};
     let ctrlModifyProj = () =>{};
     let ctrlDeleteTodo = () => {};
+    let ctrlModifyTodo = () => {};
 
-    function init (addProjectFuncIn, selectProjectIn, deleteProjectIn, addTodoIn, modifyProjectIn, deleteTodoIn){
+    function init (addProjectFuncIn, selectProjectIn, deleteProjectIn, addTodoIn, modifyProjectIn, deleteTodoIn, modifyTodo){
         ctrlAddProject = addProjectFuncIn;
         ctrlSelectProject = selectProjectIn;
         ctrlDeleteProject = deleteProjectIn;
         ctrlAddToDo = addTodoIn;
         ctrlModifyProj = modifyProjectIn;
         ctrlDeleteTodo = deleteTodoIn;
+        ctrlModifyTodo = modifyTodo;
 
         document.getElementById('content').appendChild(mainDiv);
         document.body.style.background = '#111';
@@ -159,7 +161,7 @@ const RenderPage = (() => {
         tempTodoDiv.appendChild(addTodoDiv);
         addTodoDiv.classList.add('add-button-class');
         addTodoDiv.innerHTML = `Add todo`;
-        addTodoDiv.addEventListener('click', (()=> _createTodoForm(projectItem)));
+        addTodoDiv.addEventListener('click', (()=> _createTodoForm(null)));
 
         if (projectItem){
             const todoList = projectItem.getTodoItems();
@@ -206,7 +208,7 @@ const RenderPage = (() => {
         todoDescr.innerHTML = todoItem.getDescription();
         //add show/hide toggle for long comments
 
-        _addIconsHover(singleTodoDiv, _createTodoForm, ctrlDeleteTodo, projectItem);
+        _addIconsHover(singleTodoDiv, _createTodoForm, ctrlDeleteTodo, todoItem);
     }
 
 
@@ -306,7 +308,7 @@ const RenderPage = (() => {
     }
 
     //form to create a todo item
-    function _createTodoForm(projectItem){
+    function _createTodoForm(todoItem){
 
         let _todoForm = document.createElement('div'); //overlay for project form
         mainDiv.appendChild(_todoForm);
@@ -421,7 +423,7 @@ const RenderPage = (() => {
                 priorityItems[i].style.cssText += `
                                                 border: none;
                                                 `
-        }
+            }
         
             priorityButton.style.border =`3px solid ${colorScheme.prioritySelect}`;
             selectedProirity = priorityButton.priorityNum;
@@ -433,13 +435,38 @@ const RenderPage = (() => {
         submitCreateBtn.classList = 'button-form';
         submitCreateBtn.innerHTML = 'Create';
         submitCreateBtn.addEventListener('click', (()=> {
-            if(ctrlAddToDo(getTitleInput.value, getDescriptInput.value, getDueDateInput.value, selectedProirity))
-            {
-                (_destroyTodoForm(_todoForm)());
+            if (!todoItem){
+                if(ctrlAddToDo(getTitleInput.value, getDescriptInput.value, getDueDateInput.value, selectedProirity)){
+                    (_destroyTodoForm(_todoForm)());
+                }
+                else return;
             }
-            else return;
+            else if (todoItem){
+                if (ctrlModifyTodo(getTitleInput.value, getDescriptInput.value, getDueDateInput.value, selectedProirity, todoItem)){
+                    (_destroyTodoForm(_todoForm)());
+                }
+            }
         }))
 
+        if (todoItem){
+
+            submitCreateBtn.innerHTML = 'Modify';
+            overlayTitle.innerHTML = todoItem.getTitle();
+            getTitleInput.value = todoItem.getTitle();
+            getDescriptInput.value = todoItem.getDescription();
+            getDueDateInput.value = todoItem.getDueDate();
+            switch (todoItem.getPriority){
+                case 1:
+                    _changePriorityColor(getLowPriorityInput);
+                    break;     
+                case 2:
+                    _changePriorityColor(getMedPriorityInput);
+                    break;
+                case 3:
+                    _changePriorityColor(getHighPriorityInput);
+                    break;               
+            }
+        }
     }
 
     function _destroyTodoForm(_todoForm){

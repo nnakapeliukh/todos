@@ -8,7 +8,7 @@ function controlModule (projectsListIn){
     let id = 0;
 
     function start() {
-        RenderPage.init(addProject, selectProject, removeProject, addTodo, modifyProject, removeTodo);
+        RenderPage.init(addProject, selectProject, removeProject, addTodo, modifyProject, removeTodo, modifyTodo);
         currentProject = projectsList[0];
         _refreshPage();
     }
@@ -79,18 +79,26 @@ function controlModule (projectsListIn){
         else return false
     }
 
-    function removeTodo(projectIn, todoIn){
+    function removeTodo(todoIn){
        //look for the todo to delete
-       let todoList = projectIn.getTodoItems();
+       let todoList = currentProject.getTodoItems();
        for (let i =0; i < todoList.length;i++){
-        if (projectIn === todoList[i]){            
-            projectIn.removeTodo(i);
-            _refreshPage();
-            return;
+            if (todoIn === todoList[i]){            
+                currentProject.removeTodoItem(i);
+                _refreshPage();
+                return;
+            }
         }
     }
-    
+
+    function modifyTodo (titleIn, descriptionIn, dueDateIn, priorityIn, todoItem){
+        todoItem.setTitle(titleIn);
+        todoItem.setDescription(descriptionIn);
+        todoItem.setPriority(priorityIn);
+        return true;
     }
+    
+    
     function setSelectedProject(project){
         currentProject = project;
     }
@@ -101,7 +109,7 @@ function controlModule (projectsListIn){
     return {
         start,
         addProject, removeProject,
-        addTodo, removeTodo,
+        addTodo, removeTodo, modifyTodo,
         setSelectedProject, getSelectedProject,
     }
 }
