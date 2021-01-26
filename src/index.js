@@ -15,6 +15,11 @@ tt.setPriority(2);
 
 const ttt = CreateToDoItem('Default to do item N3');
 ttt.setPriority(3);
+ttt.setDescription('asdasd');
+
+const tttt = CreateToDoItem('Default to do item N4');
+tttt.setPriority(3);
+tttt.setDescription('asdasd');
 
 
 const project1 = CreateProjectItem('Default project ');
@@ -26,6 +31,7 @@ const project2 = CreateProjectItem('New default project 2');
 project1.addTodoItem(t);
 project1.addTodoItem(tt);
 project1.addTodoItem(ttt);
+project1.addTodoItem(tttt);
 
 projectsList.push(project1);
 // projectsList.push(project2);

@@ -95,6 +95,8 @@ function controlModule (projectsListIn){
         todoItem.setTitle(titleIn);
         todoItem.setDescription(descriptionIn);
         todoItem.setPriority(priorityIn);
+
+        _refreshPage();
         return true;
     }
     

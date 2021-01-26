@@ -13,7 +13,7 @@
   }
 
   body {
-      margin: 0;
+      margin: 0;      
   }
 
   .proects-div{
@@ -26,15 +26,22 @@
     overflow-x: auto; 
   }
 
-.todos-div{
+.todos-div #temp-todo{
     display: flex;
     min-height: 62vh;
-    flex: 1 1 auto;
-    overflow-x: auto;
-    justify-content: space-evenly;
+    /* flex: 1 1 auto; */
+    /* overflow-x: auto; */
+    /* justify-content: space-evenly; */
     flex-wrap: wrap;
     width: 100%;
     background-color: var(--botPaneBackground);
+    /* vertical-align: middle; */
+}
+.todo-column{
+    flex:22%;
+    max-width: 25%;
+    margin:10px;
+    
 }
 
 .project-class{
@@ -42,6 +49,7 @@
     position:relative;
     min-height: 200px;
     width: 200px;
+    min-width: 200px;
     margin: 20px;
     padding-left: 10px;
     padding-right: 5px;
@@ -49,15 +57,23 @@
     text-align: center;
     background-color: var(--topItemBackground);
     overflow: hidden;
-    text-overflow: ellipsis;                                                
+    text-overflow: ellipsis;       
+    border-radius: 20px;                                             
 }
 .add-button-class{
+    /* position: relative;
+    top: 50px;
+    left: 0; */
+
+    vertical-align: middle;
     display: inline-block;
     height: 50px;
     width: 50px;
     margin: 20px;
     padding: 20px;
     text-align: center;
+    background-color: var(--topItemBackground);
+    border-radius: 20px;  
 }
 
 .text-page{
@@ -69,13 +85,18 @@
     position:relative;
     min-height: 200px;
     min-width: 200px;
-    margin: 20px;
-    padding: 20px;
+    width: 100%;
+    /* margin: 20px;
+    padding: 20px; */
+    margin-top: 10px;;
     word-wrap: break-word;  
     text-align: center;
     background-color: var(--botItemBackground);
-    
+    overflow: hidden;
+    text-overflow: ellipsis;                      
+    border-radius: 20px;  
     }
+
 .low-todo-class{
     background-color: var(--lowPriorityBackground);
 }
@@ -86,20 +107,12 @@
     background-color: var(--highPriorityBackground);
 }
 
-.add-button-class{
-    display: inline-block;
-    height: 50px;
-    width: 50px;
-    margin: 20px;
-    padding: 20px;
-    text-align: center;
-    background-color: var(--topItemBackground);
-}
 
 .todo-text{
     display: block;
     max-width: 220px;
-    margin: 20px;
+    margin: 0;
+    padding: 0;
     word-wrap: break-word;
     padding: 20px;
     text-align: center;

@@ -114,7 +114,7 @@ const RenderPage = (() => {
             modifyIcon.style.cssText = `width: 20px;
                                         position: absolute;
                                         top: 5px;
-                                        right:3px;
+                                        right:8px;
                                         display: none;`
             let deleteIcon = document.createElement('img');
             deleteIcon.src = '../src/Img/Delete_icon.png';
@@ -122,7 +122,7 @@ const RenderPage = (() => {
             deleteIcon.style.cssText = `width: 20px;
                                         position: absolute;
                                         top: 5px;
-                                        right:28px;
+                                        right:33px;
                                         display: none;`;
 
             divToAppentTo.addEventListener('mouseover', (()=>{
@@ -156,18 +156,51 @@ const RenderPage = (() => {
         todosDiv.appendChild(tempTodoDiv);
         tempTodoDiv.style.cssText = todosDiv.style.cssText
 
+        let todoColumn1 = document.createElement('div');
+        tempTodoDiv.appendChild(todoColumn1);
+        todoColumn1.className = 'todo-column';
+
+        let todoColumn2 = document.createElement('div');
+        tempTodoDiv.appendChild(todoColumn2);
+        todoColumn2.className = 'todo-column';
+
+        let todoColumn3 = document.createElement('div');
+        tempTodoDiv.appendChild(todoColumn3);
+        todoColumn3.className = 'todo-column';
+
+        let todoColumn4 = document.createElement('div');
+        tempTodoDiv.appendChild(todoColumn4);
+        todoColumn4.className = 'todo-column';
+        
+
+
         //add create todo div. always first
         let addTodoDiv = document.createElement('div');
-        tempTodoDiv.appendChild(addTodoDiv);
-        addTodoDiv.classList.add('add-button-class');
+        todoColumn1.appendChild(addTodoDiv);
+        addTodoDiv.classList.add('todo-class');
+        // addTodoDiv.classList.add('add-button-class');
         addTodoDiv.innerHTML = `Add todo`;
         addTodoDiv.addEventListener('click', (()=> _createTodoForm(null)));
 
         if (projectItem){
             const todoList = projectItem.getTodoItems();
-            for (let k = 0; k < todoList.length; k++){
-                const todoItem = todoList[k];
-                _drawTodoItem(todoItem, tempTodoDiv, projectItem);           
+            for (let k = 1; k <= todoList.length; k++){
+                const todoItem = todoList[k-1];
+                switch (k % 4){
+                    case 1:
+                        _drawTodoItem(todoItem, todoColumn2, projectItem); 
+                        break;
+                    case 2:
+                        _drawTodoItem(todoItem, todoColumn3, projectItem); 
+                        break;
+                    case 3:
+                        _drawTodoItem(todoItem, todoColumn4, projectItem); 
+                        break;
+                    case 0:
+                        _drawTodoItem(todoItem, todoColumn1, projectItem); 
+                        break;                        
+                }
+                // _drawTodoItem(todoItem, tempTodoDiv, projectItem);           
             }
         }
 
@@ -414,6 +447,7 @@ const RenderPage = (() => {
         getHighPriorityInput.style.backgroundColor = `${colorScheme.highPriorityBackground}`
         getHighPriorityInput.addEventListener('click', ()=>{_changePriorityColor(getHighPriorityInput)});
 
+        //default priority
         let selectedProirity = 2;
 
         function _changePriorityColor(priorityButton){
@@ -455,7 +489,8 @@ const RenderPage = (() => {
             getTitleInput.value = todoItem.getTitle();
             getDescriptInput.value = todoItem.getDescription();
             getDueDateInput.value = todoItem.getDueDate();
-            switch (todoItem.getPriority){
+
+            switch (todoItem.getPriority()){
                 case 1:
                     _changePriorityColor(getLowPriorityInput);
                     break;     
@@ -464,7 +499,7 @@ const RenderPage = (() => {
                     break;
                 case 3:
                     _changePriorityColor(getHighPriorityInput);
-                    break;               
+                    break;          
             }
         }
     }
