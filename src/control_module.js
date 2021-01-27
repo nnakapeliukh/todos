@@ -70,7 +70,7 @@ function controlModule (projectsListIn){
             let newTodo = CreateTodoItem(titleIn);            
             newTodo.setDescription(descriptionIn);
             newTodo.setPriority(priorityIn);
-
+            newTodo.setDueDate(dueDateIn);
             currentProject.addTodoItem(newTodo);
 
             _refreshPage();
@@ -95,7 +95,7 @@ function controlModule (projectsListIn){
         todoItem.setTitle(titleIn);
         todoItem.setDescription(descriptionIn);
         todoItem.setPriority(priorityIn);
-
+        todoItem.setDueDate(dueDateIn);
         _refreshPage();
         return true;
     }

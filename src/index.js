@@ -8,14 +8,17 @@ let projectsList = [];
 const ControlEntity = ControlModule(projectsList);
 const t = CreateToDoItem('Default to do item N1');
 t.setPriority(1);
+t.setDueDate('2021-09-15');
 
 const tt = CreateToDoItem('Default to do item N2');
 tt.setPriority(2);
+tt.setDueDate('2021-09-15');
 
 
 const ttt = CreateToDoItem('Default to do item N3');
 ttt.setPriority(3);
 ttt.setDescription('asdasd');
+ttt.setDueDate('2021-01-25');
 
 const tttt = CreateToDoItem('Default to do item N4');
 tttt.setPriority(3);

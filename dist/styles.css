@@ -10,21 +10,14 @@
     --medPriorityBackground: #a75553;
     --highPriorityBackground: #854442;
     --prioritySelect: #679b9d;
+    --addItemColor:#85444291;
   }
 
   body {
       margin: 0;      
   }
 
-  .proects-div{
-    display: flex;                                
-    min-height: 38vh;
-    min-width: 100%;
-    background-color: var(--topPaneBackground);
-    flex: 1 1 auto;
-    overflow-y: auto;
-    overflow-x: auto; 
-  }
+  
 
 .todos-div #temp-todo{
     display: flex;
@@ -51,7 +44,7 @@
     width: 200px;
     min-width: 200px;
     margin: 20px;
-    padding-left: 10px;
+    padding-left: 5px;
     padding-right: 5px;
     word-wrap: break-word;  
     text-align: center;
@@ -60,7 +53,7 @@
     text-overflow: ellipsis;       
     border-radius: 20px;                                             
 }
-.add-button-class{
+.add-button-proj{
     /* position: relative;
     top: 50px;
     left: 0; */
@@ -75,6 +68,17 @@
     background-color: var(--topItemBackground);
     border-radius: 20px;  
 }
+.add-image{
+    height: 100%;
+    /* display: none; */
+    margin: auto;
+    opacity: 0.3;
+}
+
+.add-button-img:hover .add-image{
+    opacity: 1;
+}
+
 
 .text-page{
     max-width: 500px;
@@ -86,9 +90,7 @@
     min-height: 200px;
     min-width: 200px;
     width: 100%;
-    /* margin: 20px;
-    padding: 20px; */
-    margin-top: 10px;;
+    margin-top: 10px;
     word-wrap: break-word;  
     text-align: center;
     background-color: var(--botItemBackground);
@@ -107,14 +109,11 @@
     background-color: var(--highPriorityBackground);
 }
 
-
 .todo-text{
     display: block;
-    max-width: 220px;
-    margin: 0;
-    padding: 0;
+    margin: 0px;
+    padding: 1px;
     word-wrap: break-word;
-    padding: 20px;
     text-align: center;
 }
 
@@ -189,4 +188,42 @@
     margin: 20px;
     border: none;
     padding: 20px;
+}
+
+
+#add-todo-div{
+    background-color: var(--addItemColor);
+    min-width: 50px;
+    width: 50px;
+    min-height: 50px;
+    height: 50px;
+    padding: 20px;
+    margin:10px;
+    /* margin-bottom: 50px; */
+    display: none;
+
+}
+
+#temp-todo:hover #add-todo-div{
+    transition: 0.5s;
+    display: block;
+}
+
+#projects-div{
+    display: flex;                                
+    min-height: 38vh;
+    min-width: 100%;
+    background-color: var(--topPaneBackground);
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: auto; 
+  }
+
+  #add-project-button-id{
+    transition: display 0.5s;
+    display: none;
+}
+
+#projects-div:hover #add-project-button-id{
+    display: block;
 }

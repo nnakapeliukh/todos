@@ -1,4 +1,4 @@
-//figure out why todo items style is messed up
+import { parseISO, toDate, formatDistanceToNow} from 'date-fns'
 
 //probably have to be separated into at leas 2 files: 1 for projects 1 for todos
 //color pallete https://www.color-hex.com/color-palette/389
@@ -53,7 +53,7 @@ const RenderPage = (() => {
 
         //projects pane        
         //add auto resizing of the height depending on how many aditional overlays
-        projectsDiv.className = 'proects-div';
+        projectsDiv.id = 'projects-div';
         //todos pane 
         todosDiv.className = 'todos-div';
     }
@@ -68,10 +68,14 @@ const RenderPage = (() => {
         if (!document.getElementById('add-project-button-id')){
             let addProjectDiv = document.createElement('div');
             projectsDiv.appendChild(addProjectDiv);
-            addProjectDiv.classList.add('add-button-class');
+            addProjectDiv.classList.add('add-button-proj');
+            addProjectDiv.classList.add('add-button-img');
             addProjectDiv.id = 'add-project-button-id';
-            addProjectDiv.innerHTML = 'add project';
             addProjectDiv.addEventListener('click', (()=>_createProjectForm(null)));
+            let addIcon = document.createElement('img');
+            addIcon.src = '../src/Img/Add-icon.png';
+            addIcon.className = 'add-image';
+            addProjectDiv.appendChild(addIcon);
         }
         
 
@@ -178,9 +182,14 @@ const RenderPage = (() => {
         let addTodoDiv = document.createElement('div');
         todoColumn1.appendChild(addTodoDiv);
         addTodoDiv.classList.add('todo-class');
-        // addTodoDiv.classList.add('add-button-class');
-        addTodoDiv.innerHTML = `Add todo`;
-        addTodoDiv.addEventListener('click', (()=> _createTodoForm(null)));
+        addTodoDiv.classList.add('add-button-img');
+        addTodoDiv.id = 'add-todo-div';
+        // addTodoDiv.innerHTML = `Add todo`;
+        addTodoDiv.addEventListener('click', (()=> _createTodoForm(null)));        
+        let addIcon = document.createElement('img');
+        addIcon.src = '../src/Img/Add-icon.png';
+        addIcon.className = 'add-image';
+        addTodoDiv.appendChild(addIcon);
 
         if (projectItem){
             const todoList = projectItem.getTodoItems();
@@ -188,16 +197,16 @@ const RenderPage = (() => {
                 const todoItem = todoList[k-1];
                 switch (k % 4){
                     case 1:
-                        _drawTodoItem(todoItem, todoColumn2, projectItem); 
+                        _drawTodoItem(todoItem, todoColumn1, projectItem); 
                         break;
                     case 2:
-                        _drawTodoItem(todoItem, todoColumn3, projectItem); 
+                        _drawTodoItem(todoItem, todoColumn2, projectItem); 
                         break;
                     case 3:
-                        _drawTodoItem(todoItem, todoColumn4, projectItem); 
+                        _drawTodoItem(todoItem, todoColumn3, projectItem); 
                         break;
                     case 0:
-                        _drawTodoItem(todoItem, todoColumn1, projectItem); 
+                        _drawTodoItem(todoItem, todoColumn4, projectItem); 
                         break;                        
                 }
                 // _drawTodoItem(todoItem, tempTodoDiv, projectItem);           
@@ -239,6 +248,15 @@ const RenderPage = (() => {
         singleTodoDiv.appendChild(todoDescr);
         todoDescr.classList = 'todo-text';
         todoDescr.innerHTML = todoItem.getDescription();
+        
+        let todoDueDate = document.createElement('p');
+        singleTodoDiv.appendChild(todoDueDate);
+        todoDueDate.classList = 'todo-text';
+        if (todoItem.getDueDate()){
+            let tempDueDate = parseISO(todoItem.getDueDate());
+            todoDueDate.innerHTML ='Due ' + formatDistanceToNow(tempDueDate, {addSuffix : true});
+        }
+        
         //add show/hide toggle for long comments
 
         _addIconsHover(singleTodoDiv, _createTodoForm, ctrlDeleteTodo, todoItem);
