@@ -10,7 +10,7 @@
     --medPriorityBackground: #a75553;
     --highPriorityBackground: #854442;
     --prioritySelect: #679b9d;
-    --addItemColor:#85444291;
+    --addItemColor:#854442;
   }
 
   body {
@@ -100,13 +100,21 @@
     }
 
 .low-todo-class{
-    background-color: var(--lowPriorityBackground);
+    /* background-color: var(--lowPriorityBackground); */
+
+    background-color: var(--medPriorityBackground);
+    /* background-color: var(--highPriorityBackground); */
+    opacity: 0.5;
 }
 .med-todo-class{
-    background-color: var(--medPriorityBackground);
+    /* background-color: var(--medPriorityBackground); */
+
+    background-color: var(--highPriorityBackground);
+    opacity: 0.7;
 }
 .high-todo-class{
     background-color: var(--highPriorityBackground);
+    opacity: 1;
 }
 
 .todo-text{
@@ -117,6 +125,10 @@
     text-align: center;
 }
 
+.todo-title{
+    margin-top: 10px;
+    margin-bottom: 0;
+}
 .create-element-form{
     height: 100%;
     width: 100%;
@@ -189,24 +201,44 @@
     border: none;
     padding: 20px;
 }
-
-
-#add-todo-div{
-    background-color: var(--addItemColor);
-    min-width: 50px;
-    width: 50px;
-    min-height: 50px;
-    height: 50px;
-    padding: 20px;
-    margin:10px;
-    /* margin-bottom: 50px; */
+.todo-check{
+    margin: 10px;
+}
+.add-check-div {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
     display: none;
+}
+
+.todo-class:hover .add-check-div{
+    display: block;
+}
+.add-check-image{
+    width: 20px;
+}
+
+#add-todo-div, #add-project-button-id{
+    background-color: var(--addItemColor);
+    min-width: 0px;
+    width: 0px;
+    min-height: 0px;
+    height: 0px;
+    padding: 0px;
+    margin:0px;
+    transition: 0.1s;
+    /* margin-bottom: 50px; */
+    /* display: none; */
 
 }
 
-#temp-todo:hover #add-todo-div{
-    transition: 0.5s;
-    display: block;
+#hover-column:hover #add-todo-div{
+    /* display: block; */
+    transition: 0.3s;
+    width: 50px;
+    height: 50px;
+    padding: 20px;
+    margin:10px;
 }
 
 #projects-div{
@@ -219,11 +251,16 @@
     overflow-x: auto; 
   }
 
-  #add-project-button-id{
+  /* #add-project-button-id{
     transition: display 0.5s;
     display: none;
-}
+} */
 
 #projects-div:hover #add-project-button-id{
     display: block;
+    transition: 0.3s;
+    width: 50px;
+    height: 50px;
+    padding: 20px;
+    margin:20px;
 }

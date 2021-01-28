@@ -13,7 +13,12 @@ t.setDueDate('2021-09-15');
 const tt = CreateToDoItem('Default to do item N2');
 tt.setPriority(2);
 tt.setDueDate('2021-09-15');
-
+tt.addToChecklist('New check')
+tt.addToChecklist('New check2')
+tt.addToChecklist('New check3')
+tt.addToChecklist('New check3New check3New check3New check3New check3New check3New check3New check3')
+tt.addToChecklist('New check3')
+tt.addToChecklist('New check3')
 
 const ttt = CreateToDoItem('Default to do item N3');
 ttt.setPriority(3);

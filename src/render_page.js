@@ -163,6 +163,7 @@ const RenderPage = (() => {
         let todoColumn1 = document.createElement('div');
         tempTodoDiv.appendChild(todoColumn1);
         todoColumn1.className = 'todo-column';
+        todoColumn1.id = 'hover-column';
 
         let todoColumn2 = document.createElement('div');
         tempTodoDiv.appendChild(todoColumn2);
@@ -209,7 +210,6 @@ const RenderPage = (() => {
                         _drawTodoItem(todoItem, todoColumn4, projectItem); 
                         break;                        
                 }
-                // _drawTodoItem(todoItem, tempTodoDiv, projectItem);           
             }
         }
 
@@ -257,9 +257,35 @@ const RenderPage = (() => {
             todoDueDate.innerHTML ='Due ' + formatDistanceToNow(tempDueDate, {addSuffix : true});
         }
         
-        //add show/hide toggle for long comments
+        let todoCheckList = todoItem.getChecklist();
+        for (let i = 0; i < todoCheckList.length; i++){
+            let checkDiv = document.createElement('div');
+            checkDiv.classList = 'todo-check';
+            singleTodoDiv.appendChild(checkDiv);
+
+            let tempTask = document.createElement('input');
+            tempTask.type = 'checkbox';            
+            checkDiv.appendChild(tempTask);
+            tempTask.id = todoCheckList[i];
+
+            let labelTask = document.createElement('label');
+            checkDiv.appendChild(labelTask);            
+            labelTask.innerHTML = todoCheckList[i];
+            labelTask.htmlFor = todoCheckList[i];
+        }
 
         _addIconsHover(singleTodoDiv, _createTodoForm, ctrlDeleteTodo, todoItem);
+        
+        //add new check point button
+        let addCheckDiv = document.createElement('div');
+        singleTodoDiv.appendChild(addCheckDiv);
+        addCheckDiv.classList.add('add-check-div');
+        addCheckDiv.addEventListener('click', (()=> _createTodoForm(null)));
+        let addCheckIcon = document.createElement('img');
+        addCheckIcon.src = '../src/Img/Add-icon.png';
+        addCheckIcon.className = 'add-check-image';
+        addCheckDiv.appendChild(addCheckIcon);
+
     }
 
 

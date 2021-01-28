@@ -50,14 +50,16 @@ function CreateToDoItem(titleIn) {
     function removeFromChecklist(index){
         checklist.splice(index,1); //should remove 1 element at index position
     }
-
+    function getChecklist(){
+        return checklist;
+    }
     return {
         getTitle, setTitle,
         setDescription, getDescription,
         setDueDate, getDueDate,
         setPriority, getPriority,
         setNotes, getNotes,
-        addToChecklist, removeFromChecklist,
+        addToChecklist, removeFromChecklist, getChecklist,
     }
 }
 
