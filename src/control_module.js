@@ -8,7 +8,7 @@ function controlModule (projectsListIn){
     let id = 0;
 
     function start() {
-        RenderPage.init(addProject, selectProject, removeProject, addTodo, modifyProject, removeTodo, modifyTodo);
+        RenderPage.init(addProject, selectProject, removeProject, addTodo, modifyProject, removeTodo, modifyTodo, addCheckItem);
         currentProject = projectsList[0];
         _refreshPage();
     }
@@ -100,6 +100,10 @@ function controlModule (projectsListIn){
         return true;
     }
     
+    function addCheckItem(todoItem, checkItem){
+        todoItem.addToChecklist(checkItem);
+        _refreshPage();
+    }
     
     function setSelectedProject(project){
         currentProject = project;
@@ -112,6 +116,7 @@ function controlModule (projectsListIn){
         start,
         addProject, removeProject,
         addTodo, removeTodo, modifyTodo,
+        addCheckItem,
         setSelectedProject, getSelectedProject,
     }
 }

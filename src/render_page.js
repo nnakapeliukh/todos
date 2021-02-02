@@ -1,5 +1,5 @@
 import { parseISO, toDate, formatDistanceToNow} from 'date-fns'
-
+//add check toggle
 //probably have to be separated into at leas 2 files: 1 for projects 1 for todos
 //color pallete https://www.color-hex.com/color-palette/389
 //move somhere else 
@@ -31,8 +31,9 @@ const RenderPage = (() => {
     let ctrlModifyProj = () =>{};
     let ctrlDeleteTodo = () => {};
     let ctrlModifyTodo = () => {};
+    let ctrlAddCheckItem = () =>{};
 
-    function init (addProjectFuncIn, selectProjectIn, deleteProjectIn, addTodoIn, modifyProjectIn, deleteTodoIn, modifyTodo){
+    function init (addProjectFuncIn, selectProjectIn, deleteProjectIn, addTodoIn, modifyProjectIn, deleteTodoIn, modifyTodo, addCheckItem){
         ctrlAddProject = addProjectFuncIn;
         ctrlSelectProject = selectProjectIn;
         ctrlDeleteProject = deleteProjectIn;
@@ -40,6 +41,7 @@ const RenderPage = (() => {
         ctrlModifyProj = modifyProjectIn;
         ctrlDeleteTodo = deleteTodoIn;
         ctrlModifyTodo = modifyTodo;
+        ctrlAddCheckItem = addCheckItem;
 
         document.getElementById('content').appendChild(mainDiv);
         document.body.style.background = '#111';
@@ -257,6 +259,7 @@ const RenderPage = (() => {
             todoDueDate.innerHTML ='Due ' + formatDistanceToNow(tempDueDate, {addSuffix : true});
         }
         
+        //display checklist
         let todoCheckList = todoItem.getChecklist();
         for (let i = 0; i < todoCheckList.length; i++){
             let checkDiv = document.createElement('div');
@@ -280,7 +283,26 @@ const RenderPage = (() => {
         let addCheckDiv = document.createElement('div');
         singleTodoDiv.appendChild(addCheckDiv);
         addCheckDiv.classList.add('add-check-div');
-        addCheckDiv.addEventListener('click', (()=> _createTodoForm(null)));
+        addCheckDiv.addEventListener('click', (()=> {
+            let submitCheckDiv = document.createElement('div');
+            submitCheckDiv.style.position = 'relative';
+            singleTodoDiv.appendChild(submitCheckDiv);
+            let checkEdit = document.createElement('input');
+            submitCheckDiv.appendChild(checkEdit);
+            checkEdit.type = 'text';
+            checkEdit.className = 'check-edit';
+            addCheckDiv.style.display = 'none';
+
+            let SubmitCheckIcon = document.createElement('img');
+            SubmitCheckIcon.src = '../src/Img/Add-icon.png';
+            SubmitCheckIcon.className = 'submit-check-image';
+            submitCheckDiv.appendChild(SubmitCheckIcon);
+
+            SubmitCheckIcon.addEventListener('click', (()=> {
+                ctrlAddCheckItem(todoItem, checkEdit.value)
+            }));
+
+        }));
         let addCheckIcon = document.createElement('img');
         addCheckIcon.src = '../src/Img/Add-icon.png';
         addCheckIcon.className = 'add-check-image';

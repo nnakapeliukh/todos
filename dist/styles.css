@@ -129,6 +129,12 @@
     margin-top: 10px;
     margin-bottom: 0;
 }
+
+.check-edit{
+    margin: 10px;
+}
+
+
 .create-element-form{
     height: 100%;
     width: 100%;
@@ -210,7 +216,12 @@
     left: 5px;
     display: none;
 }
-
+.submit-check-image{
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+    width: 20px;
+}
 .todo-class:hover .add-check-div{
     display: block;
 }

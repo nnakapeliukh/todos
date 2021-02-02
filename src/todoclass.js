@@ -5,6 +5,7 @@ function CreateToDoItem(titleIn) {
     let priority = '';
     let notes = '';
     let checklist = [];
+    let checklistToggle = [];
     //add checklist
 
 
@@ -45,11 +46,29 @@ function CreateToDoItem(titleIn) {
 
     function addToChecklist(checklistIn){
         checklist.push(checklistIn);
+        checklistToggle.push(0);
     }
 
     function removeFromChecklist(index){
         checklist.splice(index,1); //should remove 1 element at index position
     }
+
+    function toggleCheckItem(checkItem){
+        for (let i = 0; i < checklist.length; i++){
+            if (checkItem === checkItem[i]){
+                checklistToggle[i] = checklistToggle[i] ^ 1;
+            }
+        }
+    }
+
+    function getCheckToggle(checkItem){
+        for (let i = 0; i < checklist.length; i++){
+            if (checkItem === checkItem[i]){
+                return checklistToggle[i];
+            }
+        }
+    }
+
     function getChecklist(){
         return checklist;
     }
@@ -60,6 +79,7 @@ function CreateToDoItem(titleIn) {
         setPriority, getPriority,
         setNotes, getNotes,
         addToChecklist, removeFromChecklist, getChecklist,
+        toggleCheckItem, getCheckToggle
     }
 }
 
