@@ -1,8 +1,35 @@
+import CreateTodoItem from './todoclass';
+
 function CreateProjectItem(titleIn) {
     let title = titleIn;
     let description = '';
     let todoList = [];
     let id = 0;
+
+    function toJson (){
+        let todoListJson = [];
+        for (let i = 0; i < todoList.length; i++){
+            todoListJson.push(todoList[i].toJson());
+        }
+
+        return JSON.stringify({
+            titleJ:title,
+            descriptionJ: description,
+            todoListJsonJ: todoListJson,
+        })
+    }
+
+    function buildFromJson(jsonString){
+        let JsonObj = JSON.parse(jsonString);
+        title = JsonObj.titleJ;
+        description = JsonObj.descriptionJ;
+
+        for (let i = 0; i < JsonObj.todoListJsonJ.length; i++){
+            let tempTodo = CreateTodoItem('itle');
+            tempTodo.buildFromJson(JsonObj.todoListJsonJ[i]);
+            todoList.push(tempTodo);
+        }
+    }
 
     function setId (idIn){
         id = idIn;
@@ -38,7 +65,8 @@ function CreateProjectItem(titleIn) {
         setId, getId,
         setTitle, getTitle,
         setDescription, getDescription,
-        addTodoItem, removeTodoItem, getTodoItems
+        addTodoItem, removeTodoItem, getTodoItems,
+        toJson, buildFromJson,
     }
 }
 export {CreateProjectItem as default};

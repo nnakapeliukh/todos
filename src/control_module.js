@@ -3,7 +3,22 @@ import CreateTodoItem from './todoclass';
 import RenderPage from './render_page';
 
 function controlModule (projectsListIn){
-    const projectsList = projectsListIn;
+    // localStorage.clear();
+    const projectsListJson = JSON.parse(localStorage.getItem('project-list'));    
+    let projectsList = [];
+    if (projectsListJson){
+        
+        for (let i = 0; i < projectsListJson.length; i++){
+            let tempProj = CreateProjectItem('ti2le');
+            tempProj.buildFromJson(projectsListJson[i]);
+            projectsList.push(tempProj);
+
+        }
+    }
+    else{
+        projectsList = projectsListIn;
+    }
+
     let currentProject = '';
     let id = 0;
 
@@ -17,6 +32,7 @@ function controlModule (projectsListIn){
     function _refreshPage(){
         RenderPage.renderProjectsFromList(projectsList);
         RenderPage.displaySelectedProject(currentProject);
+        _saveToStorage();
     }
 
     function selectProject(projectItem){
@@ -112,6 +128,18 @@ function controlModule (projectsListIn){
     function getSelectedProject(){
         return currentProject
     }
+
+    function _saveToStorage(){
+        let tempList = [];
+        for (let i = 0; i < projectsList.length; i++){
+            tempList.push(projectsList[i].toJson());
+        }
+
+        const myStorage = window.localStorage;
+        myStorage.removeItem('project-list');
+        myStorage.setItem('project-list', JSON.stringify(tempList));
+    }
+
     return {
         start,
         addProject, removeProject,

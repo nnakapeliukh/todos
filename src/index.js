@@ -3,8 +3,8 @@ import CreateProjectItem from './projectclass.js';
 import RenderPage from './render_page';
 import ControlModule from './control_module';
 
-
 let projectsList = [];
+
 const ControlEntity = ControlModule(projectsList);
 const t = CreateToDoItem('Default to do item N1');
 t.setPriority(1);
@@ -40,12 +40,11 @@ project1.addTodoItem(t);
 project1.addTodoItem(tt);
 project1.addTodoItem(ttt);
 project1.addTodoItem(tttt);
-
 projectsList.push(project1);
-// projectsList.push(project2);
+projectsList.push(project2);
 
 let mainDiv = document.getElementById('content');
 
 
 
-ControlEntity.start(ControlEntity);
+ControlEntity.start(projectsList);

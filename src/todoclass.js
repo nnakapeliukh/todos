@@ -8,6 +8,28 @@ function CreateToDoItem(titleIn) {
     let checklistToggle = [];
     //add checklist
 
+    function toJson (){
+
+        return JSON.stringify({
+            titleJ:title,
+            descriptionJ: description,
+            dueDateJ: dueDate,
+            priorityJ:priority,
+            notesJ: notes,
+            checklistJ: checklist,
+        })
+    }
+
+    function buildFromJson(jsonString){
+        const jsonObj = JSON.parse(jsonString);
+        title = jsonObj.titleJ;
+        description = jsonObj.descriptionJ
+        dueDate = jsonObj.dueDate
+        priority = jsonObj.priorityJ
+        notes = jsonObj.notesJ
+
+        checklist = jsonObj.checklistJ;
+    }
 
     function setTitle (titleIn){
         title = titleIn;
@@ -79,7 +101,8 @@ function CreateToDoItem(titleIn) {
         setPriority, getPriority,
         setNotes, getNotes,
         addToChecklist, removeFromChecklist, getChecklist,
-        toggleCheckItem, getCheckToggle
+        toggleCheckItem, getCheckToggle,
+        toJson, buildFromJson,
     }
 }
 
