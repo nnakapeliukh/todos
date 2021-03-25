@@ -5,8 +5,8 @@ function CreateToDoItem(titleIn) {
     let priority = '';
     let notes = '';
     let checklist = [];
-    let checklistToggle = [];
-    //add checklist
+    const checklistToggle = [];
+    // add checklist
 
     function toJson (){
 
@@ -31,8 +31,8 @@ function CreateToDoItem(titleIn) {
         checklist = jsonObj.checklistJ;
     }
 
-    function setTitle (titleIn){
-        title = titleIn;
+    function setTitle (titleInn){
+        title = titleInn;
     }
     function getTitle (){
         return title;
@@ -72,7 +72,7 @@ function CreateToDoItem(titleIn) {
     }
 
     function removeFromChecklist(index){
-        checklist.splice(index,1); //should remove 1 element at index position
+        checklist.splice(index,1); // should remove 1 element at index position
     }
 
     function toggleCheckItem(checkItem){
