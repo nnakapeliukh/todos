@@ -1,4 +1,8 @@
 import { parseISO, toDate, formatDistanceToNow } from "date-fns";
+
+import addIconImport from "./Img/Add-icon.png";
+import modifyIconImport from "./Img/Edit_icon.png";
+import deleteIconImport from "./Img/Delete_icon.png";
 // add check toggle
 // probably have to be separated into at leas 2 files: 1 for projects 1 for todos
 // color pallete https://www.color-hex.com/color-palette/389
@@ -73,7 +77,7 @@ const RenderPage = (() => {
       addProjectDiv.id = "add-project-button-id";
       addProjectDiv.addEventListener("click", () => createProjectForm(null));
       const addIcon = document.createElement("img");
-      addIcon.src = "../src/Img/Add-icon.png";
+      addIcon.src = addIconImport;
       addIcon.className = "add-image";
       addProjectDiv.appendChild(addIcon);
     }
@@ -118,7 +122,7 @@ const RenderPage = (() => {
     itemToManipulate
   ) {
     const modifyIcon = document.createElement("img");
-    modifyIcon.src = "../src/Img/Edit_icon.png";
+    modifyIcon.src = modifyIconImport;
     divToAppentTo.appendChild(modifyIcon);
     modifyIcon.style.cssText = `width: 20px;
                                         position: absolute;
@@ -126,7 +130,7 @@ const RenderPage = (() => {
                                         right:8px;
                                         display: none;`;
     const deleteIcon = document.createElement("img");
-    deleteIcon.src = "../src/Img/Delete_icon.png";
+    deleteIcon.src = deleteIconImport;
     divToAppentTo.appendChild(deleteIcon);
     deleteIcon.style.cssText = `width: 20px;
                                         position: absolute;
@@ -189,7 +193,7 @@ const RenderPage = (() => {
     // addTodoDiv.innerHTML = `Add todo`;
     addTodoDiv.addEventListener("click", () => createTodoForm(null));
     const addIcon = document.createElement("img");
-    addIcon.src = "../src/Img/Add-icon.png";
+    addIcon.src = addIconImport;
     addIcon.className = "add-image";
     addTodoDiv.appendChild(addIcon);
 
@@ -291,7 +295,7 @@ const RenderPage = (() => {
       addCheckDiv.style.display = "none";
 
       const SubmitCheckIcon = document.createElement("img");
-      SubmitCheckIcon.src = "../src/Img/Add-icon.png";
+      SubmitCheckIcon.src = addIconImport;
       SubmitCheckIcon.className = "submit-check-image";
       submitCheckDiv.appendChild(SubmitCheckIcon);
 
@@ -300,7 +304,7 @@ const RenderPage = (() => {
       });
     });
     const addCheckIcon = document.createElement("img");
-    addCheckIcon.src = "../src/Img/Add-icon.png";
+    addCheckIcon.src = addIconImport;
     addCheckIcon.className = "add-check-image";
     addCheckDiv.appendChild(addCheckIcon);
   }
