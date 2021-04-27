@@ -23,13 +23,13 @@
     "eslint-plugin-import": "^2.22.1",
     "prettier": "2.2.1",
     "style-loader": "^2.0.0",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.35.1",
-    "webpack-cli": "^4.6.0"
   },
   "dependencies": {
     "date-fns": "^2.16.1",
     "express": "^4.14.0",
-    "file-loader": "^6.2.0"
+    "file-loader": "^6.2.0",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.35.1",
+    "webpack-cli": "^4.6.0"
   }
 }
